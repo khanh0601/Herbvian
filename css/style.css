@@ -136,10 +136,73 @@ html.lenis body {
   pointer-events: none;
 }
 
+/* --- LUXURY CUSTOM SCROLLBAR --- */
+/* Modern standards (Firefox, Safari 16+) */
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(40, 75, 53, 0.35) var(--bg-page);
+}
+
+/* WebKit-based browsers (Chrome, Edge, Opera, Safari) */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(40, 75, 53, 0.3);
+  border-radius: 9999px;
+  border: 2px solid var(--bg-page); /* Creates elegant inset floating pill */
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-light);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-primary);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Custom scrollbar for inner scrollable containers (e.g., Cart Drawer) */
+.drawer-body,
+[data-lenis-prevent] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(40, 75, 53, 0.25) transparent;
+}
+
+.drawer-body::-webkit-scrollbar,
+[data-lenis-prevent]::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.drawer-body::-webkit-scrollbar-track,
+[data-lenis-prevent]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawer-body::-webkit-scrollbar-thumb,
+[data-lenis-prevent]::-webkit-scrollbar-thumb {
+  background-color: rgba(40, 75, 53, 0.25);
+  border-radius: 9999px;
+}
+
+.drawer-body::-webkit-scrollbar-thumb:hover,
+[data-lenis-prevent]::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-light);
 }
 
 body {
@@ -1347,12 +1410,21 @@ ol {
 }
 
 .footer-brand .brand-logo {
-  color: #FAF7F2;
-  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
-.footer-brand .brand-logo svg {
-  color: var(--color-accent-gold);
+.footer-brand .footer-logo-image {
+  width: 140px;
+  height: auto;
+  filter: brightness(0) invert(0.97);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.footer-brand .brand-logo:hover .footer-logo-image {
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
 .footer-bio {

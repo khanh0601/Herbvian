@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ]).then(() => {
       preloader.classList.add('is-leaving');
 
+      // Trigger Hero staggered cascade at the exact moment preloader begins fading out
+      revealHero();
+
       let preloaderRemoved = false;
       const removePreloader = () => {
         if (preloaderRemoved) return;
@@ -103,12 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
           lenis.start();
           lenis.resize();
         }
+        initScrollReveal();
         window.dispatchEvent(new CustomEvent('herbvian:hero-ready'));
       };
 
       preloader.addEventListener('transitionend', removePreloader, { once: true });
       setTimeout(removePreloader, isMotionIntro ? 500 : 280);
     });
+  } else {
+    // If preloader is not active, reveal Hero and observe scroll immediately
+    revealHero();
+    initScrollReveal();
   }
 
   // --- 1. Sticky Header on Scroll ---
@@ -316,24 +324,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 7. Smooth Scroll Reveal on Scroll ---
-  const revealElements = document.querySelectorAll('.reveal');
-  if (revealElements.length > 0 && 'IntersectionObserver' in window) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
+  function revealHero() {
+    const heroReveals = document.querySelectorAll('#hero .reveal');
+    heroReveals.forEach(el => el.classList.add('is-visible'));
+  }
+
+  let scrollRevealInitialized = false;
+  function initScrollReveal() {
+    if (scrollRevealInitialized) return;
+    scrollRevealInitialized = true;
+
+    const scrollRevealElements = document.querySelectorAll('.reveal:not(#hero .reveal)');
+    if (scrollRevealElements.length === 0) return;
+
+    if ('IntersectionObserver' in window) {
+      const isMobile = window.innerWidth <= 768;
+      // Negative bottom margin ensures element must enter 30px-55px inside the viewport before triggering,
+      // so the user actually sees the slide-up and fade-in instead of it finishing while still off-screen!
+      const bottomMargin = isMobile ? '-30px' : '-55px';
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        threshold: 0.12,
+        rootMargin: `0px 0px ${bottomMargin} 0px`
+      });
+
+      scrollRevealElements.forEach(el => {
+        // If element is already on-screen at boot (e.g. refreshed halfway down the page), reveal immediately
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 55 && rect.bottom > 0) {
+          el.classList.add('is-visible');
+        } else {
+          revealObserver.observe(el);
         }
       });
-    }, {
-      root: null,
-      threshold: 0.12,
-      rootMargin: '160px 0px'
-    });
-
-    revealElements.forEach(el => revealObserver.observe(el));
-  } else {
-    revealElements.forEach(el => el.classList.add('is-visible'));
+    } else {
+      scrollRevealElements.forEach(el => el.classList.add('is-visible'));
+    }
   }
 
   // --- 8. Smooth Anchor Navigation with Offset ---
