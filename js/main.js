@@ -4,11 +4,43 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 0. Hero readiness gate ---
+  // --- 0. Smooth Scroll Engine (Lenis) ---
+  let lenis = null;
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: false, // Keep native touch momentum on mobile devices
+      autoResize: true,
+    });
+    window.lenis = lenis;
+
+    function lenisRaf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(lenisRaf);
+    }
+    requestAnimationFrame(lenisRaf);
+
+    // Shopify Customizer / Section Rendering API compatibility hooks
+    if (window.Shopify && window.Shopify.designMode) {
+      document.addEventListener('shopify:section:load', () => lenis.resize());
+      document.addEventListener('shopify:section:reorder', () => lenis.resize());
+      document.addEventListener('shopify:section:select', () => lenis.resize());
+      document.addEventListener('shopify:section:deselect', () => lenis.resize());
+    }
+  }
+
+  // --- Hero readiness gate ---
   const preloader = document.getElementById('sitePreloader');
   const root = document.documentElement;
 
   if (preloader && root.classList.contains('preloader-active')) {
+    if (lenis) lenis.stop();
     const preloaderLogo = preloader.querySelector('.site-preloader-logo');
     const isMotionIntro = root.dataset.preloaderMode === 'motion';
     // The SVG finishes at 1.9s. Keep its completed logo visible briefly before fading.
@@ -67,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
         root.classList.remove('preloader-active');
         delete root.dataset.preloaderMode;
         delete root.dataset.preloaderSource;
+        if (lenis) {
+          lenis.start();
+          lenis.resize();
+        }
         window.dispatchEvent(new CustomEvent('herbvian:hero-ready'));
       };
 
@@ -95,6 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
       window.requestAnimationFrame(updateHeaderState);
     }
   }, { passive: true });
+  if (lenis) {
+    lenis.on('scroll', () => {
+      if (!headerTicking) {
+        headerTicking = true;
+        window.requestAnimationFrame(updateHeaderState);
+      }
+    });
+  }
   updateHeaderState();
 
   // --- 2. Mobile Menu Drawer ---
@@ -107,12 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileDrawer.classList.add('active');
     drawerOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
   }
 
   function closeMobileMenu() {
     mobileDrawer.classList.remove('active');
     drawerOverlay.classList.remove('active');
     document.body.style.overflow = '';
+    if (lenis) lenis.start();
   }
 
   if (mobileToggle) mobileToggle.addEventListener('click', openMobileMenu);
@@ -148,12 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
     cartDrawer.classList.add('active');
     drawerOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
   }
 
   function closeCartDrawer() {
     cartDrawer.classList.remove('active');
     drawerOverlay.classList.remove('active');
     document.body.style.overflow = '';
+    if (lenis) lenis.start();
   }
 
   if (cartToggleBtn) cartToggleBtn.addEventListener('click', openCartDrawer);
@@ -297,14 +345,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetEl) {
         e.preventDefault();
         closeMobileMenu();
-        const headerOffset = 70;
-        const elementPosition = targetEl.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        if (lenis) {
+          lenis.scrollTo(targetEl, {
+            offset: -70,
+            duration: 1.2
+          });
+        } else {
+          const headerOffset = 70;
+          const elementPosition = targetEl.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
       }
     });
   });
@@ -329,6 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.setAttribute('aria-expanded', !isExpanded);
       if (item) {
         item.classList.toggle('active', !isExpanded);
+      }
+
+      if (lenis) {
+        setTimeout(() => lenis.resize(), 320);
       }
     });
   });
