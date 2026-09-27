@@ -6,7 +6,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- 0. Smooth Scroll Engine (Lenis) ---
   let lenis = null;
-  if (typeof Lenis !== 'undefined') {
+  const shouldEnableLenis = window.matchMedia('(min-width: 768px)').matches;
+  if (shouldEnableLenis && typeof Lenis !== 'undefined') {
     lenis = new Lenis({
       duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -525,6 +526,143 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize 3D positions
   update3DDeck();
+
+  // --- 11. Mobile Card Swipers ---
+  // On phones, grouped cards become touch carousels; Stories also uses two slides on tablet.
+  const mobileSwiperMedia = window.matchMedia('(max-width: 639px)');
+  const tabletStoriesSwiperMedia = window.matchMedia('(min-width: 640px) and (max-width: 1023px)');
+  const mobileSwiperConfigs = [
+    { selector: '.products-grid', slideSelector: '.product-card', mobileSlidesPerView: 1.08 },
+    { selector: '.ocean-cards-grid', slideSelector: '.ocean-card', mobileSlidesPerView: 1.08 },
+    { selector: '.stories-cards-grid', slideSelector: '.story-card', mobileSlidesPerView: 1.08, tabletSlidesPerView: 2 },
+    { selector: '.journey-steps-grid', slideSelector: '.step-card', mobileSlidesPerView: 1.45 },
+  ];
+  const mobileSwipers = new Map();
+
+  function createMobileSwiper(config, slidesPerView) {
+    const container = document.querySelector(config.selector);
+    if (!container || typeof Swiper === 'undefined') return;
+
+    const existing = mobileSwipers.get(container);
+    if (existing) {
+      if (existing.slidesPerView !== slidesPerView) {
+        existing.instance.params.slidesPerView = slidesPerView;
+        existing.instance.update();
+        existing.slidesPerView = slidesPerView;
+      }
+      return;
+    }
+
+    const slides = [...container.querySelectorAll(`:scope > ${config.slideSelector}`)];
+    if (slides.length < 2) return;
+
+    // A carousel should enter as one unit; individual slide reveals cause flicker and
+    // can replay awkwardly when users swipe.
+    const slideRevealClasses = slides.map((slide) => {
+      const classes = [...slide.classList].filter((className) => (
+        className === 'reveal'
+        || className === 'is-visible'
+        || className.startsWith('reveal-delay-')
+      ));
+      slide.classList.remove(...classes);
+      return classes;
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'swiper-wrapper';
+    slides.forEach((slide) => {
+      slide.classList.add('swiper-slide');
+      wrapper.appendChild(slide);
+    });
+
+    const pagination = document.createElement('div');
+    pagination.className = 'mobile-swiper-pagination';
+    container.classList.add('swiper', 'mobile-swiper', 'reveal', 'mobile-swiper-reveal');
+    container.append(wrapper);
+    // Keep controls outside the clipped Swiper viewport so they remain visible.
+    container.insertAdjacentElement('afterend', pagination);
+
+    // The global reveal observer may have already initialized before responsive
+    // Swiper markup is created, so observe this new container when needed.
+    if (scrollRevealInitialized) {
+      const rect = container.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 30 && rect.bottom > 0) {
+        container.classList.add('is-visible');
+      } else if ('IntersectionObserver' in window) {
+        const swiperRevealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+        swiperRevealObserver.observe(container);
+      } else {
+        container.classList.add('is-visible');
+      }
+    }
+
+    const instance = new Swiper(container, {
+      slidesPerView,
+      spaceBetween: 14,
+      speed: 500,
+      grabCursor: true,
+      watchOverflow: true,
+      a11y: {
+        enabled: true,
+      },
+      pagination: {
+        el: pagination,
+        clickable: true,
+        bulletClass: 'mobile-swiper-bullet',
+        bulletActiveClass: 'is-active',
+        renderBullet: (index, className) => `<button class="${className}" type="button" aria-label="Go to slide ${index + 1}"></button>`,
+      },
+    });
+
+    mobileSwipers.set(container, {
+      instance,
+      wrapper,
+      pagination,
+      slides,
+      slideRevealClasses,
+      slidesPerView,
+    });
+  }
+
+  function destroyMobileSwiper(container) {
+    const record = mobileSwipers.get(container);
+    if (!record) return;
+
+    record.instance.destroy(true, true);
+    record.slides.forEach((slide, index) => {
+      slide.classList.remove('swiper-slide');
+      slide.classList.add(...record.slideRevealClasses[index], 'is-visible');
+      container.insertBefore(slide, record.wrapper);
+    });
+    record.wrapper.remove();
+    record.pagination.remove();
+    container.classList.remove('swiper', 'mobile-swiper', 'reveal', 'mobile-swiper-reveal', 'is-visible');
+    mobileSwipers.delete(container);
+  }
+
+  function updateMobileSwipers() {
+    mobileSwiperConfigs.forEach((config) => {
+      const container = document.querySelector(config.selector);
+      if (!container) return;
+      const slidesPerView = mobileSwiperMedia.matches
+        ? config.mobileSlidesPerView
+        : (tabletStoriesSwiperMedia.matches ? config.tabletSlidesPerView : null);
+
+      if (slidesPerView) createMobileSwiper(config, slidesPerView);
+      else destroyMobileSwiper(container);
+    });
+    if (window.lenis) window.lenis.resize();
+  }
+
+  updateMobileSwipers();
+  mobileSwiperMedia.addEventListener('change', updateMobileSwipers);
+  tabletStoriesSwiperMedia.addEventListener('change', updateMobileSwipers);
 
   // Initial cart UI setup
   updateCartUI();

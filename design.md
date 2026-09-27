@@ -84,11 +84,11 @@ Dự án sử dụng bộ 3 font kết hợp hài hòa tạo nên phong cách v�
 | **Hero Script Sub** | Caveat | `40px` (`2.5rem`) | `28px` (`1.75rem`) | `600` | `1.2` | `0` |
 | **Section H1 / H2** | Playfair Display | `40px` (`2.5rem`) | `28px` (`1.75rem`) | `600` | `1.2` | `-0.01em` |
 | **Section H3 / Card** | Playfair Display | `20px` (`1.25rem`) | `18px` (`1.125rem`) | `600` | `1.3` | `0` |
-| **Eyebrow / Overline** | Plus Jakarta Sans | `11px - 12px` | `11px` | `700` | `1.4` | `0.14em` (Uppercase) |
+| **Eyebrow / Overline** | Plus Jakarta Sans | `11px - 12px` | `14px` | `700` | `1.4` | `0.14em` (Uppercase) |
 | **Body Large** | Plus Jakarta Sans | `17px` (`1.0625rem`) | `15px` | `400` | `1.65` | `0` |
 | **Body Regular** | Plus Jakarta Sans | `15px` (`0.9375rem`) | `14px` | `400` | `1.6` | `0` |
-| **Body Small / Meta** | Plus Jakarta Sans | `13px` (`0.8125rem`) | `12px` | `400 / 500` | `1.5` | `0` |
-| **Button Text** | Plus Jakarta Sans | `13px` (`0.8125rem`) | `12px` | `600` | `1` | `0.08em` (Uppercase) |
+| **Body Small / Meta** | Plus Jakarta Sans | `13px` (`0.8125rem`) | `14px` | `400 / 500` | `1.5` | `0` |
+| **Button Text** | Plus Jakarta Sans | `13px` (`0.8125rem`) | `14px` | `600` | `1` | `0.08em` (Uppercase) |
 
 ---
 
@@ -216,6 +216,54 @@ Dự án sử dụng bộ 3 font kết hợp hài hòa tạo nên phong cách v�
   - Tablet: `640px - 1023px`
   - Desktop: `≥ 1024px`
   - Wide Desktop: `≥ 1280px`
+
+### 5.3. Responsive Rules cho Tablet & Mobile
+
+#### 5.3.1. Nguyên tắc chung
+- Viết CSS theo hướng **mobile-first**; style mặc định dành cho màn hình nhỏ, sau đó mở rộng bằng `@media (min-width: 640px)` và `@media (min-width: 1024px)`.
+- Trên mobile và tablet, cỡ chữ hiển thị nhỏ nhất là **`14px`** (`0.875rem`), gồm cả meta text, nhãn, button text và nội dung trong card; không dùng `12px` hoặc `13px` để ép layout vừa màn hình.
+- Không tạo cuộn ngang ngoài chủ đích. Mọi media phải có `max-width: 100%`; dùng `min-width: 0` cho phần tử con trong Grid/Flex để tránh tràn layout.
+- Container dùng `width: min(100% - 32px, 1240px)` trên mobile, `width: min(100% - 48px, 1240px)` từ tablet trở lên và căn giữa bằng `margin-inline: auto`.
+- Khoảng cách giữa các cột: mobile `16px`, tablet `24px`, desktop `24px - 32px`.
+- Các layout nhiều cột phải chuyển cấp theo thứ tự: desktop → tablet → mobile; không thu nhỏ nội dung desktop để ép vừa màn hình.
+- Nội dung văn bản chính giới hạn khoảng `65ch`; tiêu đề dùng `text-wrap: balance`, đoạn văn dùng `text-wrap: pretty` khi trình duyệt hỗ trợ.
+
+#### 5.3.2. Tablet (`640px - 1023px`)
+- **Header:** Chiều cao `72px`; ẩn menu desktop ở giữa và hiện `#mobileMenuToggle`. Giữ logo, tìm kiếm và giỏ hàng; có thể ẩn nhãn chữ của icon nhưng không ẩn icon giỏ hàng.
+- **Mobile Navigation Drawer:** Dùng chung drawer cho tablet, rộng tối đa `400px`, chiều rộng `min(88vw, 400px)`, mở từ cạnh phải và khóa cuộn trang phía sau.
+- **Hero:** Dùng `min-height: 760px` hoặc `100svh` nếu lớn hơn; nội dung tối đa `620px`. Căn trái nội dung, giữ CTA trên một hàng. Trust Row chuyển thành lưới `2 × 2`, khoảng cách `20px - 24px`.
+- **Journey:** Khối nội dung và collage xếp thành `1` cột; collage đặt dưới phần mô tả. Lưới quy trình dùng `3` cột × `2` hàng; ẩn các mũi tên nối gây sai hướng giữa hai hàng.
+- **Spa & Wellness:** Ảnh và nội dung xếp `1` cột hoặc tỉ lệ `5/7` nếu chiều ngang cho phép; lưới đặc tính dùng `3` cột, hàng cuối căn giữa.
+- **Best Sellers:** Lưới sản phẩm `2` cột. Các card cùng hàng phải đồng chiều cao; nút Add to Cart nằm sát đáy card.
+- **Blog Stories:** Khởi tạo Swiper với `slidesPerView: 2`, có pagination custom và không autoplay; card thứ ba xem bằng thao tác vuốt thay vì bị phóng to ở hàng cuối.
+- **Mission Banner:** Giảm chiều cao tối thiểu còn `480px`; giới hạn nội dung `560px`, lớp phủ ảnh phải đảm bảo độ tương phản chữ.
+- **Value Guarantee Bar:** Lưới `2 × 2`.
+- **Footer:** Lưới `2` cột; khối newsletter chiếm toàn bộ chiều rộng nếu cần.
+
+#### 5.3.3. Mobile (`< 640px`)
+- **Header:** Chiều cao `64px`; chỉ giữ logo, nút menu và giỏ hàng. Ẩn navigation desktop, search và account khỏi thanh chính; chuyển chúng vào drawer nếu chức năng vẫn cần thiết.
+- **Mobile Navigation Drawer:** Rộng `min(88vw, 360px)`, cao `100dvh`; mỗi link có vùng chạm tối thiểu `44px`. Đóng drawer bằng nút Close, click backdrop và phím `Escape`; trả focus về nút đã mở drawer.
+- **Hero:** Dùng `min-height: 100svh`, không dùng chiều cao cố định. Căn nội dung về đáy hoặc giữa tùy vùng an toàn của ảnh; padding ngang `16px`, padding trên tối thiểu bằng chiều cao header + `32px`. CTA được phép rộng `100%` nhưng tối đa `320px`.
+- **Hero Trust Row:** Hiển thị lưới `2` cột; ở màn hình `< 380px` chuyển thành `1` cột. Bỏ chevron phân cách, giảm icon nhưng không nhỏ hơn `28px`.
+- **Torn Paper / Hero Mask:** Giảm `padding-bottom` hero từ `125px` xuống `88px - 96px`; mask không được che CTA hoặc Trust Row. Có fallback nền phẳng khi trình duyệt không hỗ trợ `mask-image`.
+- **Journey:** Mọi khối xếp `1` cột. Collage giảm góc xoay và không vượt container. Quy trình 6 bước hiển thị `2` cột; với màn hình `< 380px` dùng `1` cột.
+- **Spa & Wellness:** Ảnh và nội dung xếp `1` cột; lưới đặc tính dùng `2` cột, mục cuối có thể chiếm `2` cột và căn giữa.
+- **Best Sellers:** Lưới `2` cột với gap `12px`; ở màn hình `< 380px` dùng `1` cột. Padding card `12px`; ảnh giữ tỉ lệ `1:1`; tên sản phẩm tối đa `2` dòng.
+- **Blog Stories:** Lưới `1` cột, ảnh giữ tỉ lệ `16:10`.
+- **Card Carousel:** Các nhóm thẻ Product, Blog Stories, Ocean cards và Journey steps phải khởi tạo **Swiper** trên mobile. Hiển thị khoảng `1.08` card/lượt để lộ thẻ kế tiếp, hỗ trợ vuốt tay, không autoplay. Pagination là các dot nhỏ màu xanh rừng; dot active kéo dài thành pill, có focus state rõ ràng.
+- **Mission Banner:** Chiều cao tối thiểu `440px`; nội dung căn trái, padding `24px 16px`; điều chỉnh `background-position` để chủ thể không bị cắt.
+- **Value Guarantee Bar:** Lưới `1` cột hoặc danh sách ngang có divider; không dùng carousel tự chạy.
+- **Footer:** Xếp `1` cột. Newsletter gồm input và button xếp dọc, cùng chiều rộng `100%`; nhóm link dài có thể dùng accordion với trạng thái `aria-expanded`.
+- **Cart Drawer:** Chiếm `100vw` ở màn hình `< 480px`, tối đa `420px` ở màn hình lớn hơn; footer tổng tiền/checkout ghim ở đáy nhưng không che danh sách sản phẩm.
+- **Toast:** Căn giữa phía dưới, `left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));`; không che nút checkout hoặc navigation cố định.
+
+#### 5.3.4. Tương tác, khả năng truy cập & thiết bị đặc biệt
+- Mọi nút/link tương tác có vùng chạm tối thiểu `44 × 44px`; khoảng cách giữa hai mục chạm liền nhau tối thiểu `8px`.
+- Không phụ thuộc riêng vào `hover`. Chỉ áp dụng hiệu ứng hover trong `@media (hover: hover) and (pointer: fine)`; luôn có trạng thái `:focus-visible` rõ ràng.
+- Drawer và modal phải khóa focus trong vùng đang mở, có backdrop, hỗ trợ `Escape`, gắn đúng `aria-controls` và cập nhật `aria-expanded`.
+- Với `@media (prefers-reduced-motion: reduce)`, tắt parallax, giảm animation/transition xuống gần `0ms` và không dùng smooth scroll bắt buộc.
+- Hỗ trợ vùng an toàn bằng `env(safe-area-inset-*)` cho header, drawer, toast và các CTA sát mép màn hình.
+- Kiểm thử tối thiểu tại các viewport: `360 × 800`, `390 × 844`, `768 × 1024`, `820 × 1180`, `1024 × 768`; đồng thời kiểm tra xoay ngang và mức zoom trình duyệt `200%`.
 
 ---
 
@@ -352,4 +400,3 @@ Khi xây dựng trang chủ (`index.html`), cấu trúc phải đi theo trình t
 
 ---
 *Tài liệu này là quy chuẩn cao nhất cho toàn bộ giao diện dự án Herbvian.*
-

@@ -59,9 +59,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
 
   <!-- Master Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=performance-v8">
+  <link rel="stylesheet" href="css/style.css?v=responsive-v15">
 
   <!-- Structured Data: Organization, WebSite, FAQPage, and Product Rating Schema for Google SEO -->
   <script type="application/ld+json">
@@ -187,21 +188,18 @@
     <div class="container header-container">
 
       <!-- Brand Logo -->
-      <a href="#" class="brand-logo" title="Herbvian Home">
+      <a href="index.html" class="brand-logo" title="Herbvian Home">
         <img class="brand-logo-image" src="imgs/logo_her.svg" alt="Herbvian" width="203" height="73">
       </a>
 
       <!-- Desktop Navigation Menu -->
       <nav class="nav-menu">
-        <a href="#hero" class="nav-link active">Home</a>
-        <a href="#journey" class="nav-link">Our Story</a>
-        <a href="#ocean-crisis" class="nav-link">Why Loofah</a>
-        <a href="#spa" class="nav-link">Benefits</a>
-        <a href="#products" class="nav-link">Shop</a>
-        <a href="#reviews" class="nav-link">Reviews</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a href="#blog" class="nav-link">Blog</a>
-        <a href="#mission" class="nav-link">Wholesale</a>
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="our-story.html" class="nav-link">Our Story</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="track-order.html" class="nav-link">Track Order</a>
       </nav>
 
       <!-- Header Actions -->
@@ -700,10 +698,6 @@
             </article>
 
           </div>
-
-          <div class="ocean-footnote reveal">
-            AI-generated illustrations
-          </div>
         </div>
       </div>
     </section>
@@ -795,9 +789,6 @@
 
           <!-- Column 2: Vietnamese Loofah (Hero Highlight Card) -->
           <div class="compare-col compare-col-loofah">
-            <!-- Floating VS badge situated on the right edge -->
-            <div class="compare-vs-badge" aria-hidden="true">VS</div>
-
             <div class="compare-header-cell loofah-header">
               <div class="col-head-text">
                 <span class="compare-pill pill-plant">
@@ -806,12 +797,12 @@
                   </svg>
                   PLANT-BASED
                 </span>
-                <h3 class="col-product-name font-serif">Vietnamese<br>Loofah</h3>
-                <p class="col-product-desc">Sun-Dried<br>Vietnamese Vine</p>
+                <h3 class="col-product-name font-serif">Vietnamese <br>Loofah</h3>
+                <p class="col-product-desc">Sun-Dried <br>Vietnamese Vine</p>
               </div>
               <div class="col-head-img-wrap">
                 <img src="imgs/compare-loofah.webp" alt="Vietnamese Natural Loofah" class="col-head-img img-loofah"
-                  width="256" height="256" loading="lazy" decoding="async">
+                  width="256" height="256" loading="eager" decoding="async">
               </div>
             </div>
 
@@ -874,12 +865,12 @@
                   <span class="pill-dot">○</span>
                   SYNTHETIC
                 </span>
-                <h3 class="col-product-name font-serif">Plastic<br>Mesh Pouf</h3>
-                <p class="col-product-desc">Fossil-Fuel<br>Extruded Nylon</p>
+                <h3 class="col-product-name font-serif">Plastic <br>Mesh Pouf</h3>
+                <p class="col-product-desc">Fossil-Fuel <br>Extruded Nylon</p>
               </div>
               <div class="col-head-img-wrap">
                 <img src="imgs/compare-plastic.webp" alt="Plastic Mesh Pouf" class="col-head-img img-plastic"
-                  width="256" height="256" loading="lazy" decoding="async">
+                  width="256" height="256" loading="eager" decoding="async">
               </div>
             </div>
 
@@ -1734,7 +1725,8 @@
         <!-- Column 1: Brand & Social -->
         <div class="footer-col footer-brand reveal footer-delay-1">
           <a href="#" class="brand-logo" title="Herbvian Home">
-            <img class="brand-logo-image footer-logo-image" src="imgs/logo_her.svg" alt="Herbvian" width="203" height="73">
+            <img class="brand-logo-image footer-logo-image" src="imgs/logo_her.svg" alt="Herbvian" width="203"
+              height="73">
           </a>
           <p class="footer-bio">
             Sustainably harvested loofah from the sunny farms of Vietnam, bringing purity and organic gentle care to
@@ -1849,21 +1841,18 @@
        ======================================================================== -->
   <nav class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation" data-lenis-prevent>
     <div class="mobile-nav-header">
-      <a href="#" class="brand-logo">
+      <a href="index.html" class="brand-logo">
         <img class="brand-logo-image" src="imgs/logo_her.svg" alt="Herbvian" width="203" height="73">
       </a>
       <button class="drawer-close-btn" id="mobileCloseBtn" title="Close Menu">&times;</button>
     </div>
     <div class="mobile-nav-menu">
-      <a href="#hero" class="mobile-nav-link">Home</a>
-      <a href="#journey" class="mobile-nav-link">Our Story</a>
-      <a href="#spa" class="mobile-nav-link">Benefits</a>
-      <a href="#ocean-crisis" class="mobile-nav-link">Why Loofah</a>
-      <a href="#products" class="mobile-nav-link">Shop</a>
-      <a href="#reviews" class="mobile-nav-link">Reviews</a>
-      <a href="#faq" class="mobile-nav-link">FAQ</a>
-      <a href="#blog" class="mobile-nav-link">Blog</a>
-      <a href="#journey" class="mobile-nav-link">Wholesale</a>
+      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="shop.html" class="mobile-nav-link">Shop</a>
+      <a href="our-story.html" class="mobile-nav-link">Our Story</a>
+      <a href="blog.html" class="mobile-nav-link">Blog</a>
+      <a href="contact.html" class="mobile-nav-link">Contact</a>
+      <a href="track-order.html" class="mobile-nav-link">Track Order</a>
     </div>
   </nav>
 
@@ -1878,7 +1867,8 @@
 
   <!-- Scripts -->
   <script src="js/lenis.min.js"></script>
-  <script src="js/main.js?v=reveal-v2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+  <script src="js/main.js?v=swiper-v5"></script>
 </body>
 
 </html>
