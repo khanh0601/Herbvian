@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Shop | Herbvian</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=all-pages-8">
+</head>
+
+<body>
+  <header class="page-header">
+    <div class="container page-header__inner">
+      <a class="page-logo" href="index.html" aria-label="Herbvian home">
+        <img src="imgs/logo_her.svg" alt="Herbvian">
+      </a>
+      <nav class="page-nav" id="pageNav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="shop.html" aria-current="page">Shop</a>
+        <a href="our-story.html">Our Story</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+        <a href="track-order.html">Track Order</a>
+      </nav>
+      <div class="page-actions">
+        <button class="page-icon" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+        </button>
+        <button class="page-icon page-account" type="button" aria-label="Account">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"></circle><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"></path></svg>
+        </button>
+        <button class="page-icon" type="button" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18M16 10a4 4 0 0 1-8 0"></path></svg>
+        </button>
+        <button class="page-icon page-menu-toggle" id="pageMenuToggle" type="button" aria-label="Open menu" aria-controls="pageNav" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="shop-hero">
+      <img class="section-bg-image shop-bg-image" src="imgs/shop_hero.webp" alt="" loading="lazy" decoding="async" aria-hidden="true">
+      <div class="container">
+        <div class="breadcrumb">Home / Shop</div>
+        <div class="shop-hero-copy">
+          <span class="eyebrow">Everyday care, rooted in nature</span>
+          <h1>Small rituals.<br>Naturally better.</h1>
+          <p>Thoughtfully crafted Vietnamese loofah essentials for your body and home.</p>
+          <div class="shop-script">From our fields to your everyday.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container shop-layout">
+      <button class="shop-filter-toggle" id="shopFilterToggle" type="button" aria-controls="shopFilters" aria-expanded="false">
+        <span>Filter products</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8 15h4"></path></svg>
+      </button>
+
+      <aside class="shop-filters" id="shopFilters">
+        <div class="shop-filter-head"><h2>Filter by</h2><button class="shop-clear" type="button">Clear all</button></div>
+        <details class="shop-filter" open>
+          <summary>Product type</summary>
+          <label><input type="checkbox">Body scrubbers</label>
+          <label><input type="checkbox">Back scrubbers</label>
+          <label><input type="checkbox">Facial pads</label>
+          <label><input type="checkbox">Kitchen sponges</label>
+          <label><input type="checkbox">Gift sets</label>
+        </details>
+        <details class="shop-filter" open>
+          <summary>Price</summary>
+          <div class="price-boxes"><input value="$ 0" aria-label="Minimum price"><span>–</span><input value="$ 50" aria-label="Maximum price"></div>
+          <div class="price-range" aria-hidden="true"></div>
+        </details>
+        <details class="shop-filter" open>
+          <summary>Availability</summary>
+          <label><input type="checkbox">In stock</label>
+          <label><input type="checkbox">Out of stock</label>
+        </details>
+        <details class="shop-filter" open>
+          <summary>Size</summary>
+          <label><input type="checkbox">Small</label>
+          <label><input type="checkbox">Medium</label>
+          <label><input type="checkbox">Large</label>
+        </details>
+      </aside>
+
+      <div class="shop-catalogue">
+        <div class="shop-catalogue-head">
+          <span>9 products</span>
+          <label class="sr-only" for="shopSort">Sort products</label>
+          <select id="shopSort"><option>Sort by: Featured</option></select>
+        </div>
+        <div class="shop-products" id="products"></div>
+        <p class="shop-viewed">You've viewed all 9 products.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="page-footer__grid">
+        <div><img class="page-footer__logo" src="imgs/logo_her.svg" alt="Herbvian"><p>Natural care from Vietnam, for a healthier you and a happier planet.</p></div>
+        <div><h3>Shop</h3><ul><li><a href="shop.html">All products</a></li><li><a href="shop.html">Bath &amp; Body</a></li></ul></div>
+        <div><h3>Our story</h3><ul><li><a href="our-story.html">Our journey</a></li><li><a href="contact.html">Contact us</a></li></ul></div>
+      </div>
+      <div class="page-footer__bottom">© 2026 Herbvian.</div>
+    </div>
+  </footer>
+
+  <script>
+    const productsElement = document.getElementById('products');
+    const products = [
+      ['product-1.webp', 'Natural Loofah Sponge', '$8.00', 'Bestseller'],
+      ['product-2.webp', 'Everyday Body Pad', '$12.00'],
+      ['product-3.webp', 'Long Handle Back Scrubber', '$18.00'],
+      ['product-2.webp', 'Gentle Facial Pads', '$9.00'],
+      ['product-4.webp', 'Kitchen Loofah Duo', '$10.00'],
+      ['product-3.webp', 'Cotton Loofah Mitt', '$14.00'],
+      ['product-1.webp', 'Travel Loofah Set', '$16.00'],
+      ['product-4.webp', 'Everyday Care Gift Set', '$28.00', 'New'],
+      ['product-1.webp', 'Family Loofah Bundle', '$32.00']
+    ];
+
+    productsElement.innerHTML = products.map(([image, name, price, badge], index) => `
+      <article class="product-card">
+        <div class="product-image">
+          <img src="imgs/${image}" alt="${name}" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async">
+          ${badge ? `<span class="product-badge">${badge}</span>` : ''}
+        </div>
+        <div class="product-card-body">
+          <h2 class="product-name">${name}</h2>
+          <p class="price">${price}</p>
+          <button class="btn btn-cart" type="button">Add to cart</button>
+        </div>
+      </article>`).join('');
+
+    const pageMenuToggle = document.getElementById('pageMenuToggle');
+    const pageNav = document.getElementById('pageNav');
+    const shopFilterToggle = document.getElementById('shopFilterToggle');
+    const shopFilters = document.getElementById('shopFilters');
+
+    function togglePanel(button, panel) {
+      const isOpen = !panel.classList.contains('is-open');
+      panel.classList.toggle('is-open', isOpen);
+      button.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    pageMenuToggle.addEventListener('click', () => togglePanel(pageMenuToggle, pageNav));
+    shopFilterToggle.addEventListener('click', () => togglePanel(shopFilterToggle, shopFilters));
+    pageNav.addEventListener('click', (event) => {
+      if (event.target.closest('a')) {
+        pageNav.classList.remove('is-open');
+        pageMenuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 900) {
+        pageNav.classList.remove('is-open');
+        shopFilters.classList.remove('is-open');
+        pageMenuToggle.setAttribute('aria-expanded', 'false');
+        shopFilterToggle.setAttribute('aria-expanded', 'false');
+      }
+    }, { passive: true });
+  </script>
+</body>
+
+</html>
