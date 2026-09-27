@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360" role="img" aria-labelledby="title desc">
+  <title id="title">Herbvian</title>
+  <desc id="desc">Herbvian seed-to-sprout logo.</desc>
+  <rect width="480" height="360" fill="#f5f0e7"/>
+  <path fill="none" stroke="#244d38" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" d="M240 205 C236 185 246 175 240 153 C237 140 244 125 246 115"/>
+  <path fill="none" stroke="#244d38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" d="M242 163 C265 163 277 151 269 144 C262 138 256 147 263 150"/>
+  <g>
+    <path fill="#244d38" d="M240 151 C216 155 194 140 192 116 C216 115 240 127 240 151Z"/>
+    <path fill="none" stroke="#8caa83" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" d="M236 147 Q214 131 200 123 M218 134 L213 124"/>
+  </g>
+  <g>
+    <path fill="#244d38" d="M242 132 C240 107 257 87 284 84 C285 109 269 133 242 132Z"/>
+    <path fill="none" stroke="#8caa83" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" d="M247 127 Q266 109 277 92 M262 113 L273 110"/>
+  </g>
+  <path fill="#244d38" transform="translate(-2 2) rotate(-24 240 203)" d="M240 183 C227 186 225 208 240 215Z"/>
+  <path fill="#45674d" transform="translate(2 2) rotate(24 240 203)" d="M240 183 C253 186 255 208 240 215Z"/>
+  <text x="240" y="269" text-anchor="middle" fill="#244d38" font-family="Georgia, 'Times New Roman', serif" font-size="37" letter-spacing=".3">Herbvian</text>
+  <path d="M222 290 H258" stroke="#8caa83" stroke-width="1"/>
+</svg>

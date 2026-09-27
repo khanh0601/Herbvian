@@ -4,6 +4,77 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 0. Hero readiness gate ---
+  const preloader = document.getElementById('sitePreloader');
+  const root = document.documentElement;
+
+  if (preloader && root.classList.contains('preloader-active')) {
+    const preloaderLogo = preloader.querySelector('.site-preloader-logo');
+    const isMotionIntro = root.dataset.preloaderMode === 'motion';
+    // The SVG finishes at 1.9s. Keep its completed logo visible briefly before fading.
+    const svgAnimationDuration = isMotionIntro ? 1900 : 0;
+    const completedLogoHold = 500;
+    const introDuration = svgAnimationDuration + completedLogoHold;
+
+    const wait = (duration) => new Promise(resolve => setTimeout(resolve, Math.max(0, duration)));
+    const svgSequenceComplete = new Promise(resolve => {
+      let loaded = false;
+      const finish = () => {
+        if (loaded) return;
+        loaded = true;
+        wait(introDuration).then(resolve);
+      };
+
+      preloaderLogo.addEventListener('load', finish, { once: true });
+      preloaderLogo.addEventListener('error', finish, { once: true });
+
+      if (preloaderLogo.complete && preloaderLogo.naturalWidth > 0) finish();
+    });
+
+    const heroImageReady = new Promise(resolve => {
+      const heroImage = new Image();
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+
+        if (typeof heroImage.decode === 'function' && heroImage.naturalWidth > 0) {
+          heroImage.decode().catch(() => {}).finally(resolve);
+        } else {
+          resolve();
+        }
+      };
+
+      heroImage.addEventListener('load', finish, { once: true });
+      heroImage.addEventListener('error', finish, { once: true });
+      heroImage.src = 'imgs/hero.webp';
+
+      if (heroImage.complete) finish();
+    });
+
+    // Never reveal the Hero until both the SVG sequence and Hero image are ready.
+    Promise.all([
+      svgSequenceComplete,
+      heroImageReady,
+    ]).then(() => {
+      preloader.classList.add('is-leaving');
+
+      let preloaderRemoved = false;
+      const removePreloader = () => {
+        if (preloaderRemoved) return;
+        preloaderRemoved = true;
+        preloader.remove();
+        root.classList.remove('preloader-active');
+        delete root.dataset.preloaderMode;
+        delete root.dataset.preloaderSource;
+        window.dispatchEvent(new CustomEvent('herbvian:hero-ready'));
+      };
+
+      preloader.addEventListener('transitionend', removePreloader, { once: true });
+      setTimeout(removePreloader, isMotionIntro ? 500 : 280);
+    });
+  }
+
   // --- 1. Sticky Header on Scroll ---
   const header = document.querySelector('.site-header');
   let headerTicking = false;
@@ -365,4 +436,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial cart UI setup
   updateCartUI();
 });
-
